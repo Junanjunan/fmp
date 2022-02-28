@@ -1,6 +1,6 @@
 import pandas as pd
 import requests
-from slacker import API
+
 
 BASE_URL = "https://financialmodelingprep.com/"
 
