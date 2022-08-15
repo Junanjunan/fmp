@@ -3,7 +3,7 @@ import requests
 
 BASE_URL = "https://financialmodelingprep.com/"
 
-API_KEY = "1a577e3ab9a75af1372c780a58963858"
+API_KEY = "sdds"
 
 """Annual income statements"""
 

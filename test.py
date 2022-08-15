@@ -3,7 +3,7 @@ import requests
 
 BASE_URL = "https://financialmodelingprep.com/"
 
-API_KEY = "1a577e3ab9a75af1372c780a58963858"
+API_KEY = "fdffd"
 
 ANNUAL_INCOME_URL = "https://financialmodelingprep.com/api/v3/income-statement/{}?apikey="
 URL_COMPANIES_PROFILE = "https://financialmodelingprep.com/api/v3/profile/{}?apikey="

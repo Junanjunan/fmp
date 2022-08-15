@@ -4,7 +4,7 @@ import requests
 
 BASE_URL = "https://financialmodelingprep.com/"
 
-API_KEY = "1a577e3ab9a75af1372c780a58963858"
+API_KEY = "sddd"
 
 SYMBOL_LIST_URL = 'https://financialmodelingprep.com/api/v3/financial-statement-symbol-lists?apikey='
 ANNUAL_INCOME_URL = "https://financialmodelingprep.com/api/v3/income-statement/{}?apikey="
