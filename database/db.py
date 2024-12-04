@@ -1,6 +1,8 @@
 import psycopg2
 from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
+from api_enums import symbol_list_types
+from psycopg2.extras import execute_values
 
 
 class Database:
@@ -55,6 +57,15 @@ class Database:
         except Exception as e:
             print(f"Error creating table: {str(e)}")
             raise
+
+    def fill_types_table(self):
+        execute_values(
+            self.cur,
+            "INSERT INTO types (id) VALUES %s",
+            [(symbol,) for symbol in symbol_list_types]
+        )
+        self.conn.commit()
+        print("Types table filled successfully")
 
 if __name__ == "__main__":
     import sys
