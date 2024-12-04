@@ -1,4 +1,5 @@
 import psycopg2
+from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
 
 
@@ -41,3 +42,32 @@ class Database:
         if self.conn:
             self.conn.close()
             self.conn = None
+
+    def create_table(self, sql_file_name):
+        """Create tables from SQL file"""
+        try:
+            sql_file_path = Path(__file__).parent / 'sql' / sql_file_name
+            with open(sql_file_path, 'r') as file:
+                sql_script = file.read()
+            self.cur.execute(sql_script)
+            self.conn.commit()
+            print(f"Table {sql_file_name} created successfully")
+        except Exception as e:
+            print(f"Error creating table: {str(e)}")
+            raise
+
+if __name__ == "__main__":
+    import sys
+    
+    with Database() as db:
+        if len(sys.argv) < 2:
+            print("Error: Command is not executed. Please specify a method.")
+            exit(1)
+
+        method_name = sys.argv[1]
+        method = getattr(db, method_name, None)
+        args = sys.argv[2:]  # Get additional arguments
+        if method is not None and callable(method):
+            method(*args)  # Pass the arguments to the method
+        else:
+            print(f"Error: Method {method_name} not found")
