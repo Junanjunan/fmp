@@ -28,7 +28,6 @@ class SymbolTypeEnum(Enum):
 # https://financialmodelingprep.com/api/v3/stock/list
 # 'NONE' is for symbols that don't have an exchange
 class ExchangeEnum(Enum):
-    NONE = Exchange(id='NONE', name='None')
     SET = Exchange(id='SET', name='Thailand')
     BUD = Exchange(id='BUD', name='Budapest')
     MIL = Exchange(id='MIL', name='Milan')
