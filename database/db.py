@@ -1,7 +1,7 @@
 import psycopg2
 from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
-from api_enums import symbol_list_types, exchange_dict
+from api_enums import SymbolTypeEnum, ExchangeEnum
 from psycopg2.extras import execute_values
 
 
@@ -59,6 +59,7 @@ class Database:
             raise
 
     def fill_types_table(self):
+        symbol_list_types = SymbolTypeEnum.get_symbol_type_list()
         execute_values(
             self.cur,
             "INSERT INTO types (id) VALUES %s",
@@ -68,6 +69,7 @@ class Database:
         print("Types table filled successfully")
 
     def fill_exchanges_table(self):
+        exchange_dict = ExchangeEnum.get_exchange_dict()
         execute_values(
             self.cur,
             "INSERT INTO exchanges (id, name) VALUES %s",
