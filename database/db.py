@@ -78,6 +78,17 @@ class Database:
         self.conn.commit()
         print("Exchanges table filled successfully")
 
+    def get_symbols(self):
+        """
+        Get symbols from the database
+        Returns a dictionary with symbols as keys and False as values
+        False means that the symbol is not existing in the API result.
+        If the symbol is existing in the API result, the value is set to True.
+        """
+        self.cur.execute("SELECT id FROM symbols")
+        symbols_in_db = {row[0]: False for row in self.cur.fetchall()}
+        return symbols_in_db
+
 if __name__ == "__main__":
     import sys
     
