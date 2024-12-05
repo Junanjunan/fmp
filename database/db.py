@@ -59,11 +59,11 @@ class Database:
             raise
 
     def fill_types_table(self):
-        symbol_list_types = SymbolTypeEnum.get_symbol_type_list()
+        symbol_type_list = SymbolTypeEnum.get_symbol_type_list()
         execute_values(
             self.cur,
             "INSERT INTO types (id) VALUES %s",
-            [(symbol,) for symbol in symbol_list_types]
+            [(symbol,) for symbol in symbol_type_list]
         )
         self.conn.commit()
         print("Types table filled successfully")
