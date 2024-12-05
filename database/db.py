@@ -1,7 +1,7 @@
 import psycopg2
 from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
-from api_enums import symbol_list_types
+from api_enums import symbol_list_types, exchange_dict
 from psycopg2.extras import execute_values
 
 
@@ -66,6 +66,15 @@ class Database:
         )
         self.conn.commit()
         print("Types table filled successfully")
+
+    def fill_exchanges_table(self):
+        execute_values(
+            self.cur,
+            "INSERT INTO exchanges (id, name) VALUES %s",
+            [(id, name) for id, name in exchange_dict.items()]
+        )
+        self.conn.commit()
+        print("Exchanges table filled successfully")
 
 if __name__ == "__main__":
     import sys
