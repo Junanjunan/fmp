@@ -89,6 +89,40 @@ class Database:
         symbols_in_db = {row[0]: False for row in self.cur.fetchall()}
         return symbols_in_db
 
+    def update_symbol_normal_data(self, symbol, name, price, type_id, exchange_id, updated_at):
+        self.cur.execute(
+            """
+            UPDATE symbols SET
+                name = %s,
+                price = %s,
+                type_id = %s,
+                exchange_id = %s,
+                is_existing = TRUE,
+                updated_at = %s
+            WHERE id = %s
+            """,
+            (name, price, type_id, exchange_id, updated_at, symbol)
+        )
+    
+    def insert_symbol_normal_data(self, symbol, name, price, type_id, exchange_id, updated_at):
+        self.cur.execute(
+            """
+            INSERT INTO symbols
+                (id, name, price, type_id, exchange_id, is_existing, updated_at)
+            VALUES (%s, %s, %s, %s, %s, TRUE, %s)
+            """,
+            (symbol, name, price, type_id, exchange_id, updated_at)
+        )
+
+    def update_symbol_disappeared_data(self, symbol, updated_at):
+        # Set is_existing to FALSE about disappeared symbols
+        self.cur.execute(
+            """
+            UPDATE symbols SET is_existing = FALSE, updated_at = %s WHERE id = %s
+            """,
+            (updated_at, symbol)
+        )
+
 if __name__ == "__main__":
     import sys
     

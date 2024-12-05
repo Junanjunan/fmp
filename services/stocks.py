@@ -27,41 +27,19 @@ class StockService:
                     type_id = stock_data['type']
                     exchange_id = stock_data['exchangeShortName']
                     if symbol in symbols_in_db:
+                        print('update',stock_data)
                         symbols_in_db[symbol] = True
-                        # Execute update query
-                        db.cur.execute(
-                            """
-                            UPDATE symbols SET
-                                name = %s,
-                                price = %s,
-                                type_id = %s,
-                                exchange_id = %s,
-                                is_existing = TRUE,
-                                updated_at = %s
-                            WHERE id = %s
-                            """,
-                            (name, price, type_id, exchange_id, updated_at, symbol)
+                        db.update_symbol_normal_data(
+                            symbol, name, price, type_id, exchange_id, updated_at
                         )
                     else:
-                        # Execute insert query
-                        print(stock_data)
-                        db.cur.execute(
-                            """
-                            INSERT INTO symbols
-                                (id, name, price, type_id, exchange_id, is_existing, updated_at)
-                            VALUES (%s, %s, %s, %s, %s, TRUE, %s)
-                            """,
-                            (symbol, name, price, type_id, exchange_id, updated_at)
+                        print('insert',stock_data)
+                        db.insert_symbol_normal_data(
+                            symbol, name, price, type_id, exchange_id, updated_at
                         )
                 disappeared_symbols = [symbol for symbol, is_existing in symbols_in_db.items() if not is_existing]
                 for symbol in disappeared_symbols:
-                    # Set is_existing to FALSE about disappeared symbols
-                    db.cur.execute(
-                        """
-                        UPDATE symbols SET is_existing = FALSE, updated_at = %s WHERE id = %s
-                        """,
-                        (updated_at, symbol)
-                    )
+                    db.update_symbol_disappeared_data(symbol, updated_at)
                 db.conn.commit()
             print(f"Updated {len(api_result)} stocks")
         except Exception as e:
