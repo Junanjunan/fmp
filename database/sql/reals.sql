@@ -9,7 +9,8 @@ CREATE TABLE exchanges (
 
 CREATE TABLE symbols (
     id VARCHAR(20) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    price DECIMAL(25, 5),
     type_id VARCHAR(20),
     exchange_id VARCHAR(20),
     is_existing BOOLEAN DEFAULT TRUE,
