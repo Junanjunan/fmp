@@ -27,4 +27,6 @@ class RequestFMP:
     def get_api_result(self, url, params=None):
         api_url = self.get_api_url(url, params)
         response = requests.get(api_url)
+        if 'Error Message' in response.json():
+            raise Exception(response.json()['Error Message'])
         return response.json()
