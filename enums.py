@@ -12,6 +12,47 @@ class Exchange:
     id: str
     name: str
 
+@dataclass
+class IncomeStatement:
+    symbol: str
+    date: str
+    period: str
+    reported_currency: str
+    cik: str
+    filling_date: str
+    accepted_date: str
+    calendar_year: str
+    revenue: int
+    cost_of_revenue: int
+    gross_profit: int
+    gross_profit_ratio: float
+    research_and_development_expenses: int
+    general_and_administrative_expenses: int
+    selling_and_marketing_expenses: int
+    selling_general_and_administrative_expenses: int
+    other_expenses: int
+    operating_expenses: int
+    cost_and_expenses: int
+    interest_income: int
+    interest_expense: int
+    depreciation_and_amortization: int
+    ebitda: int
+    ebitda_ratio: float
+    operating_income: int
+    operating_income_ratio: float
+    total_other_income_expenses_net: int
+    income_before_tax: int
+    income_before_tax_ratio: float
+    income_tax_expense: int
+    net_income: int
+    net_income_ratio: float
+    eps: float
+    eps_diluted: float
+    weighted_average_shs_out: int
+    weighted_average_shs_out_dil: int
+    link: str
+    final_link: str
+
 
 # https://financialmodelingprep.com/api/v3/stock/list
 class SymbolTypeEnum(Enum):

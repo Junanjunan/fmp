@@ -42,6 +42,28 @@ class StockService:
             db.conn.commit()
         print(f"Updated {len(api_result)} stocks")
 
+    def get_income_statements(self, symbol):
+        symbol_url = f"{ApiUrlEnum.ANNUAL_INCOME.value.url}/{symbol}"
+        params = {'period': 'annual'}
+        income_statements = self.request.get_api_result(symbol_url, params)
+        return income_statements
+
+    def update_symbol_data(self, symbol):
+        income_statements = self.get_income_statements(symbol)
+        with Database() as db:
+            db.insert_income_statement(income_statements)
+            db.update_symbol_is_updated(symbol)
+            db.conn.commit()
+
+    def update_all_symbol_datas(self, is_from_first = True):
+        """
+        Insert income statements for all symbols
+        using method update_symbol_data
+        """
+        with Database() as db:
+            symbols_to_be_updated = db.get_symbols_to_be_updated(is_from_first)
+            for symbol in symbols_to_be_updated:
+                self.update_symbol_data(symbol)
 
 if __name__ == "__main__":
     import sys

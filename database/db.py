@@ -1,8 +1,10 @@
 import psycopg2
+import datetime
 from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
-from enums import SymbolTypeEnum, ExchangeEnum
+from enums import SymbolTypeEnum, ExchangeEnum, IncomeStatement
 from psycopg2.extras import execute_values
+from utils.string import get_camel_text
 
 
 class Database:
@@ -89,6 +91,14 @@ class Database:
         symbols_in_db = {row[0]: False for row in self.cur.fetchall()}
         return symbols_in_db
 
+    def get_symbols_to_be_updated(self, is_from_first):
+        sql = "SELECT id FROM symbols"
+        if not is_from_first:
+            sql += " WHERE is_updated = FALSE"
+        self.cur.execute(sql)
+        symbols_to_be_updated = [row[0] for row in self.cur.fetchall()]
+        return symbols_to_be_updated
+
     def update_symbol_normal_data(self, symbol, name, price, type_id, exchange_id, updated_at):
         self.cur.execute(
             """
@@ -122,6 +132,32 @@ class Database:
             """,
             (updated_at, symbol)
         )
+    
+    def update_symbol_is_updated(self, symbol):
+        updated_at = datetime.datetime.now()
+        try:
+            self.cur.execute(
+                "UPDATE symbols SET is_updated = TRUE, updated_at = %s WHERE id = %s",
+                (updated_at, symbol)
+            )
+        except Exception as e:
+            self.conn.rollback()
+            print("Error in update_symbol_is_updated: ", e)
+
+    def insert_income_statement(self, income_statements):
+        field_list = IncomeStatement.__annotations__.keys()
+        fields =', '.join(field_list)
+        placeholders = ', '.join(['%s'] * len(field_list))
+        for each_income_statement in income_statements:
+            values = [each_income_statement.get(get_camel_text(field)) for field in field_list]
+            try:
+                self.cur.execute(
+                f"INSERT INTO income_statements ({fields}) VALUES ({placeholders})",
+                    tuple(values)
+                )
+            except Exception as e:
+                self.conn.rollback()
+                print("Error in insert_income_statement: ", e)
 
 if __name__ == "__main__":
     import sys
