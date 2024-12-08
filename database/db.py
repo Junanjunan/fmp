@@ -1,7 +1,7 @@
 import psycopg2
 from pathlib import Path
 from settings import db_name, db_user, db_password, db_host, db_port
-from api_enums import SymbolTypeEnum, ExchangeEnum
+from enums import SymbolTypeEnum, ExchangeEnum
 from psycopg2.extras import execute_values
 
 
