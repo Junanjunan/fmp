@@ -12,6 +12,7 @@ class StockService:
     def __init__(self):
         self.request = RequestFMP()
 
+    @RequestFMP.try_with_all_api_keys()
     def renew_stocks_list(self):
         url = ApiUrlEnum.STOCK_LIST.value.url
         api_result = self.request.get_api_result(url)
@@ -42,12 +43,14 @@ class StockService:
             db.conn.commit()
         print(f"Updated {len(api_result)} stocks")
 
+    @RequestFMP.try_with_all_api_keys()
     def get_income_statements(self, symbol):
         symbol_url = f"{ApiUrlEnum.ANNUAL_INCOME.value.url}/{symbol}"
         params = {'period': 'annual'}
         income_statements = self.request.get_api_result(symbol_url, params)
         return income_statements
 
+    @RequestFMP.try_with_all_api_keys()
     def update_symbol_data(self, symbol):
         income_statements = self.get_income_statements(symbol)
         with Database() as db:
@@ -55,6 +58,7 @@ class StockService:
             db.update_symbol_is_updated(symbol)
             db.conn.commit()
 
+    @RequestFMP.try_with_all_api_keys()
     def update_all_symbol_datas(self, is_from_first = True):
         """
         Insert income statements for all symbols
