@@ -13,6 +13,7 @@ CREATE TABLE symbols (
     price DECIMAL(25, 5),
     type_id VARCHAR(20) NOT NULL,
     exchange_id VARCHAR(20),
+    is_updated BOOLEAN DEFAULT FALSE,
     is_existing BOOLEAN DEFAULT TRUE,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (type_id) REFERENCES types(id),
